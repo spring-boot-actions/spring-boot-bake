@@ -14,17 +14,21 @@ inputs:
 outputs:
   bake-file:
     description: 'The path to the generated docker-bake.hcl file'
-    value: "${{ github.action_path }}/spring-boot-bake.hcl"
+    value: ${{ steps.meta.outputs.bake-file }}
   dockerfile:
     description: 'The path to the generated Dockerfile'
-    value: "${{ github.action_path }}/Dockerfile"
+    value: ${{ steps.meta.outputs.dockerfile }}
 
 runs:
   using: 'composite'
   steps:
     - name: 'Spring Boot Bake'
       shell: bash
+      id: meta
       run: |
         echo "Baking the Spring Boot Docker Image"
         echo "SPRING_BOOT_BAKE_PATH=${{ github.action_path }}" >> $GITHUB_ENV
         echo "SPRING_BOOT_BAKE_BASE_IMAGE=${{ inputs.base-image }}" >> $GITHUB_ENV
+
+        echo "bake-file=${{ github.action_path }}/spring-boot-bake.hcl" >> $GITHUB_OUTPUT
+        echo "dockerfile=${{ github.action_path }}/Dockerfile" >> $GITHUB_OUTPUT
