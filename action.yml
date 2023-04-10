@@ -1,0 +1,20 @@
+name: 'Spring Boot Bake'
+description: 'Generate docker-bake.hcl and Dockerfile for "docker/bake-action" to build Spring Boot Docker Image'
+
+author: 'spring-boot-actions'
+branding:
+  color: 'green'
+  icon: 'package'
+
+outputs:
+  bake-file:
+    description: 'The path to the generated docker-bake.hcl file'
+    value: 'docker-bake.hcl'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Spring Boot Bake'
+      shell: bash
+      run: |
+        echo "Baking the Spring Boot Docker Image"
