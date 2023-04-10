@@ -1,15 +1,23 @@
 name: 'Spring Boot Bake'
 description: 'Generate docker-bake.hcl and Dockerfile for "docker/bake-action" to build Spring Boot Docker Image'
 
-author: 'spring-boot-actions'
 branding:
   color: 'green'
-  icon: 'package'
+  icon: 'power'
+
+inputs:
+  base-image:
+    description: 'The base image to use for the Docker image'
+    required: true
+    default: 'eclipse-temurin:11-jre-alpine'
 
 outputs:
   bake-file:
     description: 'The path to the generated docker-bake.hcl file'
-    value: 'docker-bake.hcl'
+    value: "${{ github.action_path }}/spring-boot-bake.hcl"
+  dockerfile:
+    description: 'The path to the generated Dockerfile'
+    value: "${{ github.action_path }}/Dockerfile"
 
 runs:
   using: 'composite'
@@ -18,3 +26,5 @@ runs:
       shell: bash
       run: |
         echo "Baking the Spring Boot Docker Image"
+        echo "SPRING_BOOT_BAKE_PATH=${{ github.action_path }}" >> $GITHUB_ENV
+        echo "SPRING_BOOT_BAKE_BASE_IMAGE=${{ inputs.base-image }}" >> $GITHUB_ENV
