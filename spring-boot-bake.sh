@@ -4,6 +4,12 @@
 SPRING_BOOT_BAKE_PATH="${GITHUB_ACTION_PATH}"
 SPRING_BOOT_BAKE_BASE_IMAGE=$1
 
+# Pre-conditions
+if [[ -z "${GRADLE_METADATA_ACTION}" ]]; then
+    echo The "Gradle Metadata Action" is required to use the Spring Boot Bake Action
+    exit 1
+fi
+
 echo "Baking the Spring Boot Docker Image"
 
 # Prepare working directory
