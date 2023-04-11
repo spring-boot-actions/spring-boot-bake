@@ -27,5 +27,6 @@ COPY --from=extract /spring-boot-extract/application/ ./
 
 ARG SPRING_BOOT_BAKE_PATH
 COPY ${SPRING_BOOT_BAKE_PATH}/entrypoint.sh ./
+RUN chmod +x entrypoint.sh
 
 CMD "/spring-boot/entrypoint.sh"
