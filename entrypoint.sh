@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/sh
 
 GLOBAL_JVM_OPTS="${GLOBAL_JVM_OPTS} "
 
