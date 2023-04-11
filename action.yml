@@ -25,10 +25,4 @@ runs:
     - name: 'Spring Boot Bake'
       shell: bash
       id: meta
-      run: |
-        echo "Baking the Spring Boot Docker Image"
-        echo "SPRING_BOOT_BAKE_PATH=${{ github.action_path }}" >> $GITHUB_ENV
-        echo "SPRING_BOOT_BAKE_BASE_IMAGE=${{ inputs.base-image }}" >> $GITHUB_ENV
-
-        echo "bake-file=${{ github.action_path }}/spring-boot-bake.hcl" >> $GITHUB_OUTPUT
-        echo "dockerfile=${{ github.action_path }}/Dockerfile" >> $GITHUB_OUTPUT
+      run: ${{ github.action_path }}/spring-boot-bake.sh
