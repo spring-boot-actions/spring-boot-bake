@@ -25,7 +25,8 @@ COPY --from=extract /spring-boot-extract/spring-boot-loader/ ./
 COPY --from=extract /spring-boot-extract/snapshot-dependencies/ ./
 COPY --from=extract /spring-boot-extract/application/ ./
 
-COPY build/scripts/entrypoint.sh ./
+ARG SPRING_BOOT_BAKE_WORKDIR=".spring-boot-bake"
+COPY ${SPRING_BOOT_BAKE_WORKDIR}/entrypoint.sh ./
 RUN chmod +x entrypoint.sh
 
 CMD "/spring-boot/entrypoint.sh"
