@@ -9,11 +9,16 @@ RUN java -Djarmode=layertools -jar /${GRADLE_BUILD_ARTIFACT} extract --destinati
 
 FROM ${SPRING_BOOT_BAKE_BASE_IMAGE}
 
-ENV GLOBAL_JAVA_OPTIONS="-XshowSettings:vm -XX:+PrintFlagsFinal "
-ENV DEFAULT_JAVA_OPTIONS="-XX:MaxRAMPercentage=70 -XX:MinRAMPercentage=50 -XX:InitialRAMPercentage=50 "
-ARG JAVA_OPTIONS=""
-ENV JAVA_OPTIONS="${JAVA_OPTIONS}"
-ENV COMBINED_JAVA_OPTIONS="${GLOBAL_JAVA_OPTIONS}${DEFAULT_JAVA_OPTIONS}${JAVA_OPTIONS}"
+ARG DEFAULT_JVM_OPTS="-XshowSettings:vm -XX:+PrintFlagsFinal"
+ENV DEFAULT_JVM_OPTS="${DEFAULT_JVM_OPTS} "
+
+ARG DEFAULT_JVM_RES_OPTS="-XX:MaxRAMPercentage=70 -XX:MinRAMPercentage=50 -XX:InitialRAMPercentage=50"
+ENV DEFAULT_JVM_RES_OPTS="${DEFAULT_JVM_RES_OPTS} "
+
+ARG JAVA_OPTS=""
+ENV JAVA_OPTS=${JAVA_OPTS}
+
+ENV COMBINED_JAVA_OPTS="\${GLOBAL_JAVA_OPTIONS}\${DEFAULT_JVM_RES_OPTS}\${JAVA_OPTS}"
 
 # Spring Boot application overlay
 WORKDIR /spring-boot
@@ -22,4 +27,4 @@ COPY --from=extract /spring-boot-extract/spring-boot-loader/ ./
 COPY --from=extract /spring-boot-extract/snapshot-dependencies/ ./
 COPY --from=extract /spring-boot-extract/application/ ./
 
-CMD "/bin/sh" "-c" "java \${COMBINED_JAVA_OPTIONS} -Djava.security.egd=file:/dev/./urandom org.springframework.boot.loader.JarLauncher"
+CMD "/bin/sh" "-c" "java \${COMBINED_JAVA_OPTS} -Djava.security.egd=file:/dev/./urandom org.springframework.boot.loader.JarLauncher"
