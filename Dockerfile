@@ -18,8 +18,6 @@ ENV DEFAULT_JVM_RES_OPTS="${DEFAULT_JVM_RES_OPTS} "
 ARG JAVA_OPTS=""
 ENV JAVA_OPTS=${JAVA_OPTS}
 
-ENV COMBINED_JAVA_OPTS="${GLOBAL_JAVA_OPTIONS}${DEFAULT_JVM_RES_OPTS}${JAVA_OPTS}"
-
 # Spring Boot application overlay
 WORKDIR /spring-boot
 COPY --from=extract /spring-boot-extract/dependencies/ ./
