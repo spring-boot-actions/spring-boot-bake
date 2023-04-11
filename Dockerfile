@@ -25,13 +25,7 @@ COPY --from=extract /spring-boot-extract/spring-boot-loader/ ./
 COPY --from=extract /spring-boot-extract/snapshot-dependencies/ ./
 COPY --from=extract /spring-boot-extract/application/ ./
 
-
-COPY <<EOF /spring-boot/entrypoint.sh
-#!/usr/bin/bash
-COMBINED_JAVA_OPTS="\${GLOBAL_JAVA_OPTIONS}\${DEFAULT_JVM_RES_OPTS}\${JAVA_OPTS}"
-CLASSPATH="org.springframework.boot.loader.JarLauncher"
-exec java \${COMBINED_JAVA_OPTS} -Djava.security.egd=file:/dev/./urandom \${CLASSPATH}
-EOF
-RUN chmod +x /spring-boot/entrypoint.sh
+ARG SPRING_BOOT_BAKE_PATH
+COPY ${SPRING_BOOT_BAKE_PATH}/entrypoint.sh ./
 
 CMD "/spring-boot/entrypoint.sh"
