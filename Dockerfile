@@ -9,14 +9,14 @@ RUN java -Djarmode=layertools -jar /${GRADLE_BUILD_ARTIFACT} extract --destinati
 
 FROM ${SPRING_BOOT_BAKE_BASE_IMAGE}
 
-ARG DEFAULT_JVM_OPTS="-XshowSettings:vm -XX:+PrintFlagsFinal"
-ENV DEFAULT_JVM_OPTS="${DEFAULT_JVM_OPTS} "
+ARG GLOBAL_JVM_OPTS="-XshowSettings:vm -XX:+PrintFlagsFinal"
+ENV GLOBAL_JVM_OPTS="${GLOBAL_JVM_OPTS} "
 
-ARG DEFAULT_JVM_RES_OPTS="-XX:MaxRAMPercentage=70 -XX:MinRAMPercentage=50 -XX:InitialRAMPercentage=50"
-ENV DEFAULT_JVM_RES_OPTS="${DEFAULT_JVM_RES_OPTS} "
+ARG JVM_OPTS_DEFAULT="-XX:MaxRAMPercentage=70 -XX:MinRAMPercentage=50 -XX:InitialRAMPercentage=50"
+ENV JVM_OPTS_DEFAULT="${JVM_OPTS_DEFAULT} "
 
-ARG JAVA_OPTS=""
-ENV JAVA_OPTS=${JAVA_OPTS}
+ARG JVM_OPTS=""
+ENV JVM_OPTS=${JVM_OPTS}
 
 # Spring Boot application overlay
 WORKDIR /spring-boot
