@@ -1,4 +1,4 @@
-ARG SPRING_BOOT_BAKE_BASE_IMAGE=eclipse-temurin:17-jre-alpine
+ARG SPRING_BOOT_BAKE_BASE_IMAGE
 FROM ${SPRING_BOOT_BAKE_BASE_IMAGE} as extract
 
 ARG GRADLE_BUILD_ARTIFACT
@@ -18,7 +18,7 @@ ENV DEFAULT_JVM_RES_OPTS="${DEFAULT_JVM_RES_OPTS} "
 ARG JAVA_OPTS=""
 ENV JAVA_OPTS=${JAVA_OPTS}
 
-ENV COMBINED_JAVA_OPTS="\${GLOBAL_JAVA_OPTIONS}\${DEFAULT_JVM_RES_OPTS}\${JAVA_OPTS}"
+ENV COMBINED_JAVA_OPTS="${GLOBAL_JAVA_OPTIONS}${DEFAULT_JVM_RES_OPTS}${JAVA_OPTS}"
 
 # Spring Boot application overlay
 WORKDIR /spring-boot
@@ -27,4 +27,13 @@ COPY --from=extract /spring-boot-extract/spring-boot-loader/ ./
 COPY --from=extract /spring-boot-extract/snapshot-dependencies/ ./
 COPY --from=extract /spring-boot-extract/application/ ./
 
-CMD "/bin/sh" "-c" "java \${COMBINED_JAVA_OPTS} -Djava.security.egd=file:/dev/./urandom org.springframework.boot.loader.JarLauncher"
+
+COPY <<EOF /spring-boot/entrypoint.sh
+#!/usr/bin/bash
+COMBINED_JAVA_OPTS="\${GLOBAL_JAVA_OPTIONS}\${DEFAULT_JVM_RES_OPTS}\${JAVA_OPTS}"
+CLASSPATH="org.springframework.boot.loader.JarLauncher"
+exec java \${COMBINED_JAVA_OPTS} -Djava.security.egd=file:/dev/./urandom \${CLASSPATH}
+EOF
+RUN chmod +x /spring-boot/entrypoint.sh
+
+CMD "/spring-boot/entrypoint.sh"
