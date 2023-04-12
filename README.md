@@ -39,6 +39,8 @@ target "build" {
 
 ### GitHub Workflow
 
+The `dockerbakery/gradle-metadata-action` is required to use this action.
+
 ```yml
 name: ci
 
