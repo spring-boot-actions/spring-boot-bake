@@ -1,13 +1,13 @@
 ## About
 Generate `Dockerfile` and `docker-bake.hcl` for `docker/bake-action` to build Spring Boot Docker Image
 
+## Usage
+
 This action use a pre-defined `Dockerfile` and `docker-bake.hcl` to generate a metatadata for building a Spring Boot Docker image.
 
 There are many different ways to build a Spring Boot Docker image. This action is just one of them. You can find more information about Spring Boot Docker image in the [Spring Boot Docker](https://spring.io/guides/topicals/spring-boot-docker/) guide.
 
 Feel free to explore other methods that fit your needs.
-
-## Usage
 
 ### Bake definition
 
