@@ -10,8 +10,6 @@ This action also handles a bake definition file that can be used with the Docker
 > **Note**:
 > You don't need to define `dockerfile` and `context` in the bake definition file. They are automatically set by the action.
 
-**docker-bake.hcl**
-
 ```hcl
 
 ```hcl
