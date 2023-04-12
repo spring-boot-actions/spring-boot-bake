@@ -93,7 +93,7 @@ jobs:
           targets: build
 ```
 
-## Input
+## Inputs
 
 Following inputs can be used as `step.with` keys
 
@@ -101,7 +101,7 @@ Following inputs can be used as `step.with` keys
 | ------------ | ------ | ------------------------------------------------------------------------------------- |
 | `base-image` | String | The base image to use for the Docker image (default "eclipse-temurin:11-jre-alpine"). |
 
-## Output
+## Outputs
 
 > Output of `docker buildx bake -f spring-boot-bake.hcl --print spring-boot-bake` command.
 
