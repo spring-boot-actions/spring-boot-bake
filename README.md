@@ -1,2 +1,128 @@
 ## About
 Generate docker-bake.hcl and Dockerfile for "docker/bake-action" to build Spring Boot Docker Image
+
+## Usage
+
+### Bake definition
+
+This action also handles a bake definition file that can be used with the Docker Bake action. You just have to declare an empty target named `spring-boot-bake` and inherit from it.
+
+> **Note**:
+> You don't need to define `dockerfile` and `context` in the bake definition file. They are automatically set by the action.
+
+**docker-bake.hcl**
+
+```hcl
+
+```hcl
+// docker-bake.hcl
+target "gradle-metadata-action" {}
+target "spring-boot-bake" {}
+
+target "build" {
+  inherits = ["gradle-metadata-action", "spring-boot-bake"]
+  context = "./"
+  dockerfile = "Dockerfile"
+  platforms = [
+    "linux/amd64",
+    "linux/arm/v6",
+    "linux/arm/v7",
+    "linux/arm64",
+    "linux/386"
+  ]
+}
+```
+
+### GitHub Workflow
+
+```yml
+name: ci
+
+on:
+  push:
+    branches:
+      - 'main'
+    tags:
+      - 'v*'
+  pull_request:
+    branches:
+      - 'main'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            name/app
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha
+
+      - name: Gradle meta
+        id: gradle-meta
+        uses: dockerbakery/gradle-metadata-action@v2
+
+      - name: Spring Boot Bake
+        id: spring-bake
+        uses: spring-boot-actions/spring-boot-bake@v1
+
+      - uses: docker/bake-action@v2
+        with:
+          files: |
+            ./docker-bake.hcl
+            ${{ steps.spring-bake.outputs.bake-file }}
+            ${{ steps.gradle-meta.outputs.bake-file }}
+          targets: build
+```
+
+## Input
+
+Following inputs can be used as `step.with` keys
+
+| Name         | Type   | Description                                                                           |
+| ------------ | ------ | ------------------------------------------------------------------------------------- |
+| `base-image` | String | The base image to use for the Docker image (default "eclipse-temurin:11-jre-alpine"). |
+
+## Output
+
+> Output of `docker buildx bake -f spring-boot-bake.hcl --print spring-boot-bake` command.
+
+```json
+{
+  "group": {
+    "default": {
+      "targets": [
+        "spring-boot-bake"
+      ]
+    }
+  },
+  "target": {
+    "spring-boot-bake": {
+      "dockerfile": "${SPRING_BOOT_BAKE_PATH}/Dockerfile",
+      "args": {
+        "SPRING_BOOT_BAKE_PATH": "${SPRING_BOOT_BAKE_PATH}",
+        "SPRING_BOOT_BAKE_BASE_IMAGE": "eclipse-temurin:17-jre-alpine",
+      }
+    }
+  }
+}
+```
+
+## Resources
+
+- [GitHub Action Environment variables](https://docs.github.com/en/actions/learn-github-actions/environment-variables)
+- [Workflow commands for GitHub Actions](https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions)
+- [Bake File Definitions](https://github.com/docker/buildx/blob/master/docs/guides/bake/file-definition.md)
+- [Spring Boot Docker](https://spring.io/guides/topicals/spring-boot-docker/)
