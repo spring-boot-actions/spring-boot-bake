@@ -50,8 +50,6 @@ target "spring-boot-bake" {
 }
 
 target "default" {
-  inherits = ["spring-boot-bake"]
-  context = "./"
   contexts = {
     "spring-boot-bake" = "target:spring-boot-bake"
   }
