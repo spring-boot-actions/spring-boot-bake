@@ -26,7 +26,6 @@ target "spring-boot-bake" {
 
 target "default" {
   inherits = ["spring-boot-bake"]
-  context = "./"
   platforms = [
     "linux/amd64",
     "linux/arm/v6",
