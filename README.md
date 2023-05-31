@@ -71,6 +71,8 @@ FROM spring-boot-bake
 # Add your custom Dockerfile here
 ```
 
+You can read more here "[Using a result of one target as a base image in another target](https://docs.docker.com/build/bake/build-contexts/#using-a-result-of-one-target-as-a-base-image-in-another-target)".
+
 ### GitHub Workflow
 
 The `dockerbakery/gradle-metadata-action` is required to use this action.
