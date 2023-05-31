@@ -17,16 +17,16 @@ This action also handles a bake definition file that can be used with the Docker
 > You don't need to define `dockerfile` and `context` in the bake definition file. They are automatically set by the action.
 
 ```hcl
-
-```hcl
 // docker-bake.hcl
 target "gradle-metadata-action" {}
-target "spring-boot-bake" {}
 
-target "build" {
-  inherits = ["gradle-metadata-action", "spring-boot-bake"]
+target "spring-boot-bake" {
+  inherits = ["gradle-metadata-action"]
+}
+
+target "default" {
+  inherits = ["spring-boot-bake"]
   context = "./"
-  dockerfile = "Dockerfile"
   platforms = [
     "linux/amd64",
     "linux/arm/v6",
@@ -35,6 +35,42 @@ target "build" {
     "linux/386"
   ]
 }
+```
+
+**Customize the image**:
+
+To customize the final image or to provide you own `Dockerfile`. Please do following:
+
+```hcl
+// docker-bake.hcl
+target "gradle-metadata-action" {}
+
+target "spring-boot-bake" {
+  inherits = ["gradle-metadata-action"]
+}
+
+target "default" {
+  inherits = ["spring-boot-bake"]
+  context = "./"
+  contexts = {
+    "spring-boot-bake" = "target:spring-boot-bake"
+  }
+  platforms = [
+    "linux/amd64",
+    "linux/arm/v6",
+    "linux/arm/v7",
+    "linux/arm64",
+    "linux/386"
+  ]
+}
+```
+
+And in your `Dockerfile`, use `spring-boot-bake` as your base image.
+
+```Dockerfile
+FROM spring-boot-bake
+
+# Add your custom Dockerfile here
 ```
 
 ### GitHub Workflow
