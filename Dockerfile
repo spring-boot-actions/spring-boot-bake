@@ -26,7 +26,7 @@ ENV GLOBAL_JVM_OPTS="${GLOBAL_JVM_OPTS} " \
     JVM_OPTS_DEFAULT="${JVM_OPTS_DEFAULT} " \
     VM_OPTS=${JVM_OPTS}
 WORKDIR ${SPRING_BOOT_BAKE_APPDIR}
-COPY --chmod=0765 ${SPRING_BOOT_BAKE_WORKDIR}/run.sh ./
+COPY --chmod=0765 "${SPRING_BOOT_BAKE_WORKDIR}/run.sh" ./
 COPY --from=spring-boot-archive /spring-boot-archive/dependencies/ ./
 COPY --from=spring-boot-archive /spring-boot-archive/spring-boot-loader/ ./
 COPY --from=spring-boot-archive /spring-boot-archive/snapshot-dependencies/ ./

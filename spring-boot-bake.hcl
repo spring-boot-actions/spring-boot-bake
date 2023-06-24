@@ -1,5 +1,5 @@
 variable "SPRING_BOOT_BAKE_WORKDIR" {
-  default = ".spring-boot-bake"
+  default = "."
 }
 
 variable "SPRING_BOOT_BAKE_PATH" {
