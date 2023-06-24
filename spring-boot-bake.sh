@@ -25,7 +25,7 @@ function copy_files() {
     local files=("$@")
     for file in "${files[@]}"; do
         echo "  - Copying file: ${file}"
-        cp "${SPRING_BOOT_BAKE_PATH}/${file}" "${SPRING_BOOT_BAKE_WORKPATH}/${file}"
+        cp "${SPRING_BOOT_BAKE_PATH}/docker/${file}" "${SPRING_BOOT_BAKE_WORKPATH}/${file}"
     done
 }
 
