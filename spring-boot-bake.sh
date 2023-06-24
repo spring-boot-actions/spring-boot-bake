@@ -39,5 +39,5 @@ echo "SPRING_BOOT_BAKE_WORKDIR=${SPRING_BOOT_BAKE_WORKDIR}" >> $GITHUB_ENV
 echo "SPRING_BOOT_BAKE_BASE_IMAGE=${SPRING_BOOT_BAKE_BASE_IMAGE}" >> $GITHUB_ENV
 
 # Set outputs
-echo "bake-file=${SPRING_BOOT_BAKE_PATH}/spring-boot-bake.hcl" >> $GITHUB_OUTPUT
-echo "dockerfile=${SPRING_BOOT_BAKE_PATH}/Dockerfile" >> $GITHUB_OUTPUT
+echo "bake-file=${SPRING_BOOT_BAKE_PATH}/docker/spring-boot-bake.hcl" >> $GITHUB_OUTPUT
+echo "dockerfile=${SPRING_BOOT_BAKE_PATH}/docker/Dockerfile" >> $GITHUB_OUTPUT
