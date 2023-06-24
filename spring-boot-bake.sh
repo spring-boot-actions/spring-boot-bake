@@ -21,10 +21,16 @@ echo "Preparing the working directory: ${SPRING_BOOT_BAKE_WORKPATH}"
 mkdir -p "${SPRING_BOOT_BAKE_WORKPATH}"
 
 # Copying files from the action to the working directory
-echo "Copying files from the action to the working directory"
-set -x
-cp "${SPRING_BOOT_BAKE_PATH}/run.sh" "${SPRING_BOOT_BAKE_WORKPATH}/run.sh"
-set +x
+function copy_files() {
+    local files=("$@")
+    for file in "${files[@]}"; do
+        echo "Copying file: ${file}"
+        cp "${SPRING_BOOT_BAKE_PATH}/${file}" "${SPRING_BOOT_BAKE_WORKPATH}/${file}"
+    done
+}
+
+echo "Transferring files to the working directory:"
+copy_files "run.sh"
 
 # Set environment variables
 echo "SPRING_BOOT_BAKE=true" >> $GITHUB_ENV
