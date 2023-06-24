@@ -14,10 +14,15 @@ echo "Baking the Spring Boot Docker Image"
 
 # Prepare working directory
 SPRING_BOOT_BAKE_WORKDIR="${GITHUB_WORKSPACE}/.spring-boot-bake"
+
+echo "Preparing the working directory: ${SPRING_BOOT_BAKE_WORKDIR}"
 mkdir -p "${SPRING_BOOT_BAKE_WORKDIR}"
 
 # Copying files from the action to the working directory
+echo "Copying files from the action to the working directory"
+set -x
 cp "${SPRING_BOOT_BAKE_PATH}/run.sh" "${SPRING_BOOT_BAKE_WORKDIR}"
+set +x
 
 # Set environment variables
 echo "SPRING_BOOT_BAKE=true" >> $GITHUB_ENV
