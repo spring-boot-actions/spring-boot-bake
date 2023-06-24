@@ -72,6 +72,19 @@ FROM spring-boot-bake
 
 You can read more here "[Using a result of one target as a base image in another target](https://docs.docker.com/build/bake/build-contexts/#using-a-result-of-one-target-as-a-base-image-in-another-target)".
 
+**Change the `WORKDIR`**:
+
+You can change the `WORKDIR` by setting the `SPRING_BOOT_BAKE_APPDIR` argument.
+
+```hcl
+target "spring-boot-bake" {
+  inherits = ["gradle-metadata-action"]
+  args = {
+    SPRING_BOOT_BAKE_APPDIR = "/app"
+  }
+}
+```
+
 ### GitHub Workflow
 
 The `dockerbakery/gradle-metadata-action` is required to use this action.

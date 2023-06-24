@@ -9,24 +9,24 @@ RUN java -Djarmode=layertools -jar /${GRADLE_BUILD_ARTIFACT} extract --destinati
 
 FROM ${SPRING_BOOT_BAKE_BASE_IMAGE}
 
-ARG GLOBAL_JVM_OPTS="-XshowSettings:vm -XX:+PrintFlagsFinal"
-ENV GLOBAL_JVM_OPTS="${GLOBAL_JVM_OPTS} "
-
-ARG JVM_OPTS_DEFAULT="-XX:MaxRAMPercentage=70 -XX:MinRAMPercentage=50 -XX:InitialRAMPercentage=50"
-ENV JVM_OPTS_DEFAULT="${JVM_OPTS_DEFAULT} "
-
-ARG JVM_OPTS=""
-ENV JVM_OPTS=${JVM_OPTS}
+# Java Virtual Machine options
+ARG GLOBAL_JVM_OPTS="-XshowSettings:vm -XX:+PrintFlagsFinal" \
+    JVM_OPTS_DEFAULT="-XX:MaxRAMPercentage=70 -XX:MinRAMPercentage=50 -XX:InitialRAMPercentage=50" \
+    JVM_OPTS=""
+ENV GLOBAL_JVM_OPTS="${GLOBAL_JVM_OPTS} " \
+    JVM_OPTS_DEFAULT="${JVM_OPTS_DEFAULT} " \
+    VM_OPTS=${JVM_OPTS}
 
 # Spring Boot application overlay
-WORKDIR /spring-boot
-COPY --from=extract /spring-boot-extract/dependencies/ ./
-COPY --from=extract /spring-boot-extract/spring-boot-loader/ ./
-COPY --from=extract /spring-boot-extract/snapshot-dependencies/ ./
-COPY --from=extract /spring-boot-extract/application/ ./
+ARG SPRING_BOOT_BAKE_APPDIR="/spring-boot"
+WORKDIR ${SPRING_BOOT_BAKE_APPDIR}
 
 ARG SPRING_BOOT_BAKE_WORKDIR=".spring-boot-bake"
 COPY ${SPRING_BOOT_BAKE_WORKDIR}/entrypoint.sh ./
 RUN chmod +x entrypoint.sh
+CMD "${SPRING_BOOT_BAKE_APPDIR}/entrypoint.sh"
 
-CMD "/spring-boot/entrypoint.sh"
+COPY --from=extract /spring-boot-extract/dependencies/ ./
+COPY --from=extract /spring-boot-extract/spring-boot-loader/ ./
+COPY --from=extract /spring-boot-extract/snapshot-dependencies/ ./
+COPY --from=extract /spring-boot-extract/application/ ./
