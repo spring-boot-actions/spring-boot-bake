@@ -7,15 +7,14 @@ WORKDIR /spring-boot-extract
 COPY build/libs/${GRADLE_BUILD_ARTIFACT} /${GRADLE_BUILD_ARTIFACT}
 RUN java -Djarmode=layertools -jar /${GRADLE_BUILD_ARTIFACT} extract --destination /spring-boot-extract
 
-ARG SPRING_BOOT_BAKE_WORKDIR=".spring-boot-bake"
-ARG SPRING_BOOT_BAKE_APPDIR="/spring-boot"
 FROM ${SPRING_BOOT_BAKE_BASE_IMAGE}
 
-ARG SPRING_BOOT_BAKE_WORKDIR
-ARG SPRING_BOOT_BAKE_APPDIR
+ARG SPRING_BOOT_BAKE_WORKDIR=".spring-boot-bake" \
+    SPRING_BOOT_BAKE_APPDIR="/spring-boot"
 COPY ${SPRING_BOOT_BAKE_WORKDIR}/entrypoint.sh ${SPRING_BOOT_BAKE_APPDIR}/entrypoint.sh
-RUN chmod +x entrypoint.sh
-CMD "${SPRING_BOOT_BAKE_APPDIR}/entrypoint.sh"
+RUN ${SPRING_BOOT_BAKE_APPDIR}/entrypoint.sh
+ENV SPRING_BOOT_BAKE_APPDIR=${SPRING_BOOT_BAKE_APPDIR}
+CMD ${SPRING_BOOT_BAKE_APPDIR}/entrypoint.sh
 
 ARG GLOBAL_JVM_OPTS="-XshowSettings:vm -XX:+PrintFlagsFinal" \
     JVM_OPTS_DEFAULT="-XX:MaxRAMPercentage=70 -XX:MinRAMPercentage=50 -XX:InitialRAMPercentage=50" \
