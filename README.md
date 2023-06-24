@@ -1,6 +1,20 @@
 ## About
 Generate `Dockerfile` and `docker-bake.hcl` for `docker/bake-action` to build Spring Boot Docker Image
 
+## Explaination
+
+This action generates a `Dockerfile` and a `docker-bake.hcl` for `docker/bake-action` to build a Spring Boot Docker image. And the structure of the container image is as follows:
+
+**Stage 1**:
+1. Prepare working directory for building Docker Image
+2. Copy necessary files to `.spring-boot-bake` in the working directory
+
+**Stage 2**:
+1. Extract `JAR` file from the Spring Boot fat JAR archive to `/spring-boot-archive`
+2. Generate `/docker-entrypoint.sh` script
+3. Configure JVM options via `ARG` and `ENV` for the Docker image
+4. Copy Spring Boot layers from `spring-boot-archive`
+
 ## Usage
 
 This action use a pre-defined `Dockerfile` and `docker-bake.hcl` to generate a metatadata for building a Spring Boot Docker image.
