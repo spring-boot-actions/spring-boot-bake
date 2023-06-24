@@ -24,7 +24,7 @@ mkdir -p "${SPRING_BOOT_BAKE_WORKPATH}"
 function copy_files() {
     local files=("$@")
     for file in "${files[@]}"; do
-        echo "Copying file: ${file}"
+        echo "  - Copying file: ${file}"
         cp "${SPRING_BOOT_BAKE_PATH}/${file}" "${SPRING_BOOT_BAKE_WORKPATH}/${file}"
     done
 }
