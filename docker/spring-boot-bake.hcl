@@ -11,7 +11,7 @@ variable "SPRING_BOOT_BAKE_BASE_IMAGE" {
 }
 
 target "spring-boot-bake" {
-  dockerfile = "${SPRING_BOOT_BAKE_PATH}/Dockerfile"
+  dockerfile = "${SPRING_BOOT_BAKE_PATH}/docker/Dockerfile"
   args = {
     SPRING_BOOT_BAKE_PATH = "${SPRING_BOOT_BAKE_PATH}"
     SPRING_BOOT_BAKE_WORKDIR = "${SPRING_BOOT_BAKE_WORKDIR}"
