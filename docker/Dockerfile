@@ -22,11 +22,11 @@ CMD /docker-entrypoint.sh
 ARG GLOBAL_JVM_OPTS="-XshowSettings:vm -XX:+PrintFlagsFinal" \
     JVM_OPTS_DEFAULT="-XX:MaxRAMPercentage=70 -XX:MinRAMPercentage=50 -XX:InitialRAMPercentage=50" \
     JVM_OPTS="" \
-    SPRING_JAR_LAUNCHER="org.springframework.boot.loader.JarLauncher"
+    SPRING_BOOT_JAR_LAUNCHER="org.springframework.boot.loader.JarLauncher"
 ENV GLOBAL_JVM_OPTS="${GLOBAL_JVM_OPTS} " \
     JVM_OPTS_DEFAULT="${JVM_OPTS_DEFAULT} " \
     VM_OPTS=${JVM_OPTS} \
-    SPRING_JAR_LAUNCHER=${SPRING_JAR_LAUNCHER}
+    SPRING_BOOT_JAR_LAUNCHER=${SPRING_BOOT_JAR_LAUNCHER}
 WORKDIR ${SPRING_BOOT_BAKE_APPDIR}
 COPY --chmod=0765 "${SPRING_BOOT_BAKE_WORKDIR}/run.sh" ./
 COPY --from=spring-boot-archive /spring-boot-archive/dependencies/ ./
