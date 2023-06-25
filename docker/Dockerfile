@@ -19,6 +19,13 @@ exec ${SPRING_BOOT_BAKE_APPDIR}/run.sh
 EOT
 CMD /docker-entrypoint.sh
 
+WORKDIR ${SPRING_BOOT_BAKE_APPDIR}
+COPY --chmod=0765 "${SPRING_BOOT_BAKE_WORKDIR}/run.sh" ./
+COPY --from=spring-boot-archive /spring-boot-archive/dependencies/ ./
+COPY --from=spring-boot-archive /spring-boot-archive/spring-boot-loader/ ./
+COPY --from=spring-boot-archive /spring-boot-archive/snapshot-dependencies/ ./
+COPY --from=spring-boot-archive /spring-boot-archive/application/ ./
+
 ARG GLOBAL_JVM_OPTS="-XshowSettings:vm -XX:+PrintFlagsFinal" \
     JVM_OPTS_DEFAULT="-XX:MaxRAMPercentage=70 -XX:MinRAMPercentage=50 -XX:InitialRAMPercentage=50" \
     JVM_OPTS="" \
@@ -27,9 +34,3 @@ ENV GLOBAL_JVM_OPTS="${GLOBAL_JVM_OPTS} " \
     JVM_OPTS_DEFAULT="${JVM_OPTS_DEFAULT} " \
     VM_OPTS=${JVM_OPTS} \
     SPRING_BOOT_JAR_LAUNCHER=${SPRING_BOOT_JAR_LAUNCHER}
-WORKDIR ${SPRING_BOOT_BAKE_APPDIR}
-COPY --chmod=0765 "${SPRING_BOOT_BAKE_WORKDIR}/run.sh" ./
-COPY --from=spring-boot-archive /spring-boot-archive/dependencies/ ./
-COPY --from=spring-boot-archive /spring-boot-archive/spring-boot-loader/ ./
-COPY --from=spring-boot-archive /spring-boot-archive/snapshot-dependencies/ ./
-COPY --from=spring-boot-archive /spring-boot-archive/application/ ./
