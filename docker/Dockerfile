@@ -21,6 +21,7 @@ ARG GLOBAL_JVM_OPTS= \
     
 COPY --chmod=0765 <<-EOT /docker-entrypoint.sh
     #!/bin/sh
+    SPRING_BOOT_BAKE_ENTRYPOINT_MODE=\${SPRING_BOOT_BAKE_ENTRYPOINT_MODE:-${SPRING_BOOT_BAKE_ENTRYPOINT_MODE}}
     if [ "${SPRING_BOOT_BAKE_ENTRYPOINT_MODE}" = "default" ]; then
         export GLOBAL_JVM_OPTS=\${GLOBAL_JVM_OPTS:-${GLOBAL_JVM_OPTS}}
         export JVM_OPTS_DEFAULT=\${JVM_OPTS_DEFAULT:-${JVM_OPTS_DEFAULT}}
@@ -29,7 +30,7 @@ COPY --chmod=0765 <<-EOT /docker-entrypoint.sh
         exec ${SPRING_BOOT_BAKE_APPDIR}/run.sh
     elif [ "${SPRING_BOOT_BAKE_ENTRYPOINT_MODE}" = "sleep" ]; then
         exec sleep infinity
-    elif [ "${SPRING_BOOT_BAKE_ENTRYPOINT_MODE}" = "none" ]; then
+    else
         exec true
     fi
 EOT
