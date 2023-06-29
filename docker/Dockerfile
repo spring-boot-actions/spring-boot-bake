@@ -1,5 +1,4 @@
 ARG SPRING_BOOT_BAKE_BASE_IMAGE=eclipse-temurin:17-jre-alpine
-ARG SPRING_BOOT_BAKE_ENTRYPOINT_MODE=default
 
 # Extract the Spring Boot layers from the JAR file
 FROM ${SPRING_BOOT_BAKE_BASE_IMAGE} AS spring-boot-archive
@@ -8,43 +7,33 @@ WORKDIR /spring-boot-archive
 COPY build/libs/${GRADLE_BUILD_ARTIFACT} /${GRADLE_BUILD_ARTIFACT}
 RUN java -Djarmode=layertools -jar /${GRADLE_BUILD_ARTIFACT} extract --destination /spring-boot-archive
 
-FROM scratch as docker-entrypoint-default
+# Build the final image
+FROM ${SPRING_BOOT_BAKE_BASE_IMAGE}
+
 ARG SPRING_BOOT_BAKE_WORKDIR="." \
-    SPRING_BOOT_BAKE_APPDIR="/spring-boot"
+    SPRING_BOOT_BAKE_APPDIR="/spring-boot" \
+    SPRING_BOOT_BAKE_ENTRYPOINT_MODE=default
+
 ARG GLOBAL_JVM_OPTS= \
     JVM_OPTS_DEFAULT= \
     JVM_OPTS= \
     SPRING_BOOT_JAR_LAUNCHER=
+    
 COPY --chmod=0765 <<-EOT /docker-entrypoint.sh
     #!/bin/sh
-    export GLOBAL_JVM_OPTS=\${GLOBAL_JVM_OPTS:-${GLOBAL_JVM_OPTS}}
-    export JVM_OPTS_DEFAULT=\${JVM_OPTS_DEFAULT:-${JVM_OPTS_DEFAULT}}
-    export VM_OPTS=\${JVM_OPTS:-${JVM_OPTS}}
-    export SPRING_BOOT_JAR_LAUNCHER=\${SPRING_BOOT_JAR_LAUNCHER:-${SPRING_BOOT_JAR_LAUNCHER}}
-    exec ${SPRING_BOOT_BAKE_APPDIR}/run.sh
+    if [ "${SPRING_BOOT_BAKE_ENTRYPOINT_MODE}" = "default" ]; then
+        export GLOBAL_JVM_OPTS=\${GLOBAL_JVM_OPTS:-${GLOBAL_JVM_OPTS}}
+        export JVM_OPTS_DEFAULT=\${JVM_OPTS_DEFAULT:-${JVM_OPTS_DEFAULT}}
+        export VM_OPTS=\${JVM_OPTS:-${JVM_OPTS}}
+        export SPRING_BOOT_JAR_LAUNCHER=\${SPRING_BOOT_JAR_LAUNCHER:-${SPRING_BOOT_JAR_LAUNCHER}}
+        exec ${SPRING_BOOT_BAKE_APPDIR}/run.sh
+    elif [ "${SPRING_BOOT_BAKE_ENTRYPOINT_MODE}" = "sleep" ]; then
+        exec sleep infinity
+    elif [ "${SPRING_BOOT_BAKE_ENTRYPOINT_MODE}" = "none" ]; then
+        exec true
+    fi
 EOT
-
-FROM scratch as docker-entrypoint-sleep
-COPY --chmod=0765 <<-EOT /docker-entrypoint.sh
-    #!/bin/sh
-    exec sleep infinity
-EOT
-
-FROM scratch as docker-entrypoint-none
-COPY --chmod=0765 <<-EOT /docker-entrypoint.sh
-    #!/bin/sh
-    exec true
-EOT
-
-# Build the final image
-FROM ${SPRING_BOOT_BAKE_BASE_IMAGE}
-
-ARG SPRING_BOOT_BAKE_ENTRYPOINT_MODE
-COPY --from=docker-entrypoint-${SPRING_BOOT_BAKE_ENTRYPOINT_MODE} /docker-entrypoint.sh /
 CMD /docker-entrypoint.sh
-
-ARG SPRING_BOOT_BAKE_WORKDIR="." \
-    SPRING_BOOT_BAKE_APPDIR="/spring-boot"
 
 WORKDIR ${SPRING_BOOT_BAKE_APPDIR}
 COPY --chmod=0765 "${SPRING_BOOT_BAKE_WORKDIR}/run.sh" ./
