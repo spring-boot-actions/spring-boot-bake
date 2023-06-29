@@ -10,12 +10,17 @@ variable "SPRING_BOOT_BAKE_BASE_IMAGE" {
   default = "eclipse-temurin:17-jre-alpine"
 }
 
+variable "SPRING_BOOT_BAKE_ENTRYPOINT_MODE" {
+  default = "default"
+}
+
 target "spring-boot-bake-template" {
   dockerfile = "${SPRING_BOOT_BAKE_PATH}/docker/Dockerfile"
   args = {
-    SPRING_BOOT_BAKE_PATH = "${SPRING_BOOT_BAKE_PATH}"
-    SPRING_BOOT_BAKE_WORKDIR = "${SPRING_BOOT_BAKE_WORKDIR}"
-    SPRING_BOOT_BAKE_BASE_IMAGE = "${SPRING_BOOT_BAKE_BASE_IMAGE}"
+    SPRING_BOOT_BAKE_PATH             = "${SPRING_BOOT_BAKE_PATH}"
+    SPRING_BOOT_BAKE_WORKDIR          = "${SPRING_BOOT_BAKE_WORKDIR}"
+    SPRING_BOOT_BAKE_BASE_IMAGE       = "${SPRING_BOOT_BAKE_BASE_IMAGE}"
+    SPRING_BOOT_BAKE_ENTRYPOINT_MODE  = "${SPRING_BOOT_BAKE_ENTRYPOINT_MODE}"
   }
 }
 
@@ -40,9 +45,9 @@ target "spring-boot-bake" {
     "spring-boot-bake-template"
   ]
   args = {
-    GLOBAL_JVM_OPTS = "${GLOBAL_JVM_OPTS}"
-    JVM_OPTS_DEFAULT = "${JVM_OPTS_DEFAULT}"
-    JVM_OPTS = "${JVM_OPTS}"
-    SPRING_BOOT_JAR_LAUNCHER = "${SPRING_BOOT_JAR_LAUNCHER}"
+    GLOBAL_JVM_OPTS           = "${GLOBAL_JVM_OPTS}"
+    JVM_OPTS_DEFAULT          = "${JVM_OPTS_DEFAULT}"
+    JVM_OPTS                  = "${JVM_OPTS}"
+    SPRING_BOOT_JAR_LAUNCHER  = "${SPRING_BOOT_JAR_LAUNCHER}"
   }
 }
