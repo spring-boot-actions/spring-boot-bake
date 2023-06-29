@@ -1,4 +1,5 @@
 ARG SPRING_BOOT_BAKE_BASE_IMAGE=eclipse-temurin:17-jre-alpine
+ARG SPRING_BOOT_BAKE_ENTRYPOINT_MODE=default
 
 # Extract the Spring Boot layers from the JAR file
 FROM ${SPRING_BOOT_BAKE_BASE_IMAGE} AS spring-boot-archive
@@ -36,7 +37,6 @@ COPY --chmod=0765 <<-EOT /docker-entrypoint.sh
 EOT
 
 # Build the final image
-ARG SPRING_BOOT_BAKE_ENTRYPOINT_MODE=default
 FROM ${SPRING_BOOT_BAKE_BASE_IMAGE}
 
 ARG SPRING_BOOT_BAKE_ENTRYPOINT_MODE
