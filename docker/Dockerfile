@@ -26,10 +26,10 @@ COPY --from=spring-boot-archive /spring-boot-archive/spring-boot-loader/ ./
 COPY --from=spring-boot-archive /spring-boot-archive/snapshot-dependencies/ ./
 COPY --from=spring-boot-archive /spring-boot-archive/application/ ./
 
-ARG GLOBAL_JVM_OPTS="-XshowSettings:vm -XX:+PrintFlagsFinal" \
-    JVM_OPTS_DEFAULT="-XX:MaxRAMPercentage=70 -XX:MinRAMPercentage=50 -XX:InitialRAMPercentage=50" \
-    JVM_OPTS="" \
-    SPRING_BOOT_JAR_LAUNCHER="org.springframework.boot.loader.JarLauncher"
+ARG GLOBAL_JVM_OPTS= \
+    JVM_OPTS_DEFAULT= \
+    JVM_OPTS= \
+    SPRING_BOOT_JAR_LAUNCHER=
 ENV GLOBAL_JVM_OPTS="${GLOBAL_JVM_OPTS} " \
     JVM_OPTS_DEFAULT="${JVM_OPTS_DEFAULT} " \
     VM_OPTS=${JVM_OPTS} \
