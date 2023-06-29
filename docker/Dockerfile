@@ -36,9 +36,10 @@ COPY --chmod=0765 <<-EOT /docker-entrypoint.sh
 EOT
 
 # Build the final image
+ARG SPRING_BOOT_BAKE_ENTRYPOINT_MODE=default
 FROM ${SPRING_BOOT_BAKE_BASE_IMAGE}
 
-ARG SPRING_BOOT_BAKE_ENTRYPOINT_MODE=default
+ARG SPRING_BOOT_BAKE_ENTRYPOINT_MODE
 COPY --from=docker-entrypoint-${SPRING_BOOT_BAKE_ENTRYPOINT_MODE} /docker-entrypoint.sh /
 CMD /docker-entrypoint.sh
 
