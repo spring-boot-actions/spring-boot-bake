@@ -11,8 +11,16 @@ RUN java -Djarmode=layertools -jar /${GRADLE_BUILD_ARTIFACT} extract --destinati
 FROM ${SPRING_BOOT_BAKE_BASE_IMAGE}
 
 ARG SPRING_BOOT_BAKE_WORKDIR="." \
-    SPRING_BOOT_BAKE_APPDIR="/spring-boot" \
-    SPRING_BOOT_BAKE_ENTRYPOINT_MODE=default
+    SPRING_BOOT_BAKE_APPDIR="/spring-boot" 
+
+WORKDIR ${SPRING_BOOT_BAKE_APPDIR}
+COPY --chmod=0765 "${SPRING_BOOT_BAKE_WORKDIR}/run.sh" ./
+COPY --from=spring-boot-archive /spring-boot-archive/dependencies/ ./
+COPY --from=spring-boot-archive /spring-boot-archive/spring-boot-loader/ ./
+COPY --from=spring-boot-archive /spring-boot-archive/snapshot-dependencies/ ./
+COPY --from=spring-boot-archive /spring-boot-archive/application/ ./
+
+ARG SPRING_BOOT_BAKE_ENTRYPOINT_MODE=default
 
 ARG GLOBAL_JVM_OPTS= \
     JVM_OPTS_DEFAULT= \
@@ -31,14 +39,8 @@ COPY --chmod=0765 <<-EOT /docker-entrypoint.sh
     elif [ "${SPRING_BOOT_BAKE_ENTRYPOINT_MODE}" = "sleep" ]; then
         exec sleep infinity
     else
-        exec true
+        # if SPRING_BOOT_BAKE_ENTRYPOINT_MODE is a file, execute it
+        [ -f "\${SPRING_BOOT_BAKE_ENTRYPOINT_MODE}" ] && exec "\${SPRING_BOOT_BAKE_ENTRYPOINT_MODE}"
     fi
 EOT
 CMD /docker-entrypoint.sh
-
-WORKDIR ${SPRING_BOOT_BAKE_APPDIR}
-COPY --chmod=0765 "${SPRING_BOOT_BAKE_WORKDIR}/run.sh" ./
-COPY --from=spring-boot-archive /spring-boot-archive/dependencies/ ./
-COPY --from=spring-boot-archive /spring-boot-archive/spring-boot-loader/ ./
-COPY --from=spring-boot-archive /spring-boot-archive/snapshot-dependencies/ ./
-COPY --from=spring-boot-archive /spring-boot-archive/application/ ./
