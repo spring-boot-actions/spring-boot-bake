@@ -9,6 +9,7 @@ RUN java -Djarmode=layertools -jar /${GRADLE_BUILD_ARTIFACT} extract --destinati
 
 # Build the final image
 FROM ${SPRING_BOOT_BAKE_BASE_IMAGE}
+
 ARG SPRING_BOOT_BAKE_WORKDIR="." \
     SPRING_BOOT_BAKE_APPDIR="/spring-boot"
 
@@ -17,13 +18,14 @@ ARG GLOBAL_JVM_OPTS= \
     JVM_OPTS= \
     SPRING_BOOT_JAR_LAUNCHER=
 COPY --chmod=0765 <<-EOT /docker-entrypoint.sh
-#!/bin/sh
-export GLOBAL_JVM_OPTS=${GLOBAL_JVM_OPTS}
-export JVM_OPTS_DEFAULT=${JVM_OPTS_DEFAULT}
-export VM_OPTS=${JVM_OPTS}
-export SPRING_BOOT_JAR_LAUNCHER=${SPRING_BOOT_JAR_LAUNCHER}
-exec ${SPRING_BOOT_BAKE_APPDIR}/run.sh
+    #!/bin/sh
+    export GLOBAL_JVM_OPTS=\${GLOBAL_JVM_OPTS:-${GLOBAL_JVM_OPTS}}
+    export JVM_OPTS_DEFAULT=\${JVM_OPTS_DEFAULT:-${JVM_OPTS_DEFAULT}}
+    export VM_OPTS=\${JVM_OPTS:-${JVM_OPTS}}
+    export SPRING_BOOT_JAR_LAUNCHER=\${SPRING_BOOT_JAR_LAUNCHER:-${SPRING_BOOT_JAR_LAUNCHER}}
+    exec ${SPRING_BOOT_BAKE_APPDIR}/run.sh
 EOT
+RUN [ -z "${SPRING_BOOT_BAKE_DISABLE_ENTRYPOINT}" ] || echo -n > /docker-entrypoint.sh
 CMD /docker-entrypoint.sh
 
 WORKDIR ${SPRING_BOOT_BAKE_APPDIR}
