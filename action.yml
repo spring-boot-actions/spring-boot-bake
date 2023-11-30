@@ -10,8 +10,8 @@ inputs:
     description: 'The base image to use for the Docker image'
     required: false
     default: 'eclipse-temurin:11-jre-alpine'
-  entrypoint:
-    description: 'Set (default) will launch the Spring Boot application. Else (sleep) will execute `sleep infinity`. Othewise, specify the entrypoint script to use.'
+  template:
+    description: 'Set (default) will use the default Dockerfile template, or specify a custom template. Available templates: default, plain'
     default: default
 
 outputs:
@@ -28,4 +28,4 @@ runs:
     - name: 'Spring Boot Bake'
       shell: bash
       id: meta
-      run: ${{ github.action_path }}/spring-boot-bake.sh "${{ inputs.base-image }}" "${{ inputs.entrypoint }}"
+      run: ${{ github.action_path }}/spring-boot-bake.sh "${{ inputs.base-image }}" "${{ inputs.template }}"

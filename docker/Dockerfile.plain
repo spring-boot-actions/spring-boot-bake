@@ -20,5 +20,5 @@ COPY --from=spring-boot-archive /spring-boot-archive/spring-boot-loader/ ./
 COPY --from=spring-boot-archive /spring-boot-archive/snapshot-dependencies/ ./
 COPY --from=spring-boot-archive /spring-boot-archive/application/ ./
 
-ARG SPRING_BOOT_BAKE_ENTRYPOINT_MODE=default
-ENV SPRING_BOOT_BAKE_ENTRYPOINT_MODE=${SPRING_BOOT_BAKE_ENTRYPOINT_MODE}
+ARG DOCKERFILE_TEMPLATE=default
+ENV DOCKERFILE_TEMPLATE=${DOCKERFILE_TEMPLATE}
