@@ -30,8 +30,10 @@ function copy_files() {
     done
 }
 
-echo "Transferring files to the working directory:"
-copy_files "run.sh"
+if [[ "${DOCKERFILE_TEMPLATE}" == "default" ]]; then
+    echo "Transferring files to the working directory:"
+    copy_files "run.sh"
+fi
 
 # Set environment variables
 echo "SPRING_BOOT_BAKE=true" >> $GITHUB_ENV
