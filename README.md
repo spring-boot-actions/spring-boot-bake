@@ -13,7 +13,7 @@ This action generates a `Dockerfile` and a `docker-bake.hcl` for `docker/bake-ac
 1. Extract `JAR` file from the Spring Boot fat JAR archive to `/spring-boot-archive`
 2. Generate `/docker-entrypoint.sh` script
 3. Configure JVM options via `ARG` and `ENV` for the Docker image
-4. Copy Spring Boot layers from `spring-boot-archive`
+4. Copy Spring Boot layers from `/spring-boot-archive` to `/spring-boot`
 
 > **Note**  
 > Starting from Spring Boot 2.4, layering is enabled by default.  
