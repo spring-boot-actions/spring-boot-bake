@@ -10,17 +10,17 @@ variable "SPRING_BOOT_BAKE_BASE_IMAGE" {
   default = "eclipse-temurin:17-jre-alpine"
 }
 
-variable "SPRING_BOOT_BAKE_ENTRYPOINT_MODE" {
+variable "DOCKERFILE_TEMPLATE" {
   default = "default" // or "plain"
 }
 
 target "spring-boot-bake-default-template" {
   dockerfile = "${SPRING_BOOT_BAKE_PATH}/docker/Dockerfile.default"
   args = {
+    DOCKERFILE_TEMPLATE  = "${DOCKERFILE_TEMPLATE}"
     SPRING_BOOT_BAKE_PATH             = "${SPRING_BOOT_BAKE_PATH}"
     SPRING_BOOT_BAKE_WORKDIR          = "${SPRING_BOOT_BAKE_WORKDIR}"
     SPRING_BOOT_BAKE_BASE_IMAGE       = "${SPRING_BOOT_BAKE_BASE_IMAGE}"
-    SPRING_BOOT_BAKE_ENTRYPOINT_MODE  = "${SPRING_BOOT_BAKE_ENTRYPOINT_MODE}"
     // Java Options
     GLOBAL_JVM_OPTS           = "${GLOBAL_JVM_OPTS}"
     JVM_OPTS_DEFAULT          = "${JVM_OPTS_DEFAULT}"
@@ -31,10 +31,10 @@ target "spring-boot-bake-default-template" {
 target "spring-boot-bake-plain-template" {
   dockerfile = "${SPRING_BOOT_BAKE_PATH}/docker/Dockerfile.plain"
   args = {
+    DOCKERFILE_TEMPLATE  = "${DOCKERFILE_TEMPLATE}"
     SPRING_BOOT_BAKE_PATH             = "${SPRING_BOOT_BAKE_PATH}"
     SPRING_BOOT_BAKE_WORKDIR          = "${SPRING_BOOT_BAKE_WORKDIR}"
     SPRING_BOOT_BAKE_BASE_IMAGE       = "${SPRING_BOOT_BAKE_BASE_IMAGE}"
-    SPRING_BOOT_BAKE_ENTRYPOINT_MODE  = "${SPRING_BOOT_BAKE_ENTRYPOINT_MODE}"
   }
 }
 
@@ -56,6 +56,6 @@ variable "SPRING_BOOT_JAR_LAUNCHER" {
 
 target "spring-boot-bake" {
   inherits = [
-    "spring-boot-bake-${SPRING_BOOT_BAKE_ENTRYPOINT_MODE}-template"
+    "spring-boot-bake-${DOCKERFILE_TEMPLATE}-template"
   ]
 }
