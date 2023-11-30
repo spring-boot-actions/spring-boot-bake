@@ -19,27 +19,3 @@ COPY --from=spring-boot-archive /spring-boot-archive/dependencies/ ./
 COPY --from=spring-boot-archive /spring-boot-archive/spring-boot-loader/ ./
 COPY --from=spring-boot-archive /spring-boot-archive/snapshot-dependencies/ ./
 COPY --from=spring-boot-archive /spring-boot-archive/application/ ./
-
-ARG SPRING_BOOT_BAKE_ENTRYPOINT_MODE=default
-
-ARG GLOBAL_JVM_OPTS= \
-    JVM_OPTS_DEFAULT= \
-    JVM_OPTS= \
-    SPRING_BOOT_JAR_LAUNCHER=
-COPY --chmod=0765 <<-EOT /docker-entrypoint.sh
-    #!/bin/sh
-    SPRING_BOOT_BAKE_ENTRYPOINT_MODE=\${SPRING_BOOT_BAKE_ENTRYPOINT_MODE:-${SPRING_BOOT_BAKE_ENTRYPOINT_MODE}}
-    if [ "${SPRING_BOOT_BAKE_ENTRYPOINT_MODE}" = "default" ]; then
-        export GLOBAL_JVM_OPTS=\${GLOBAL_JVM_OPTS:-${GLOBAL_JVM_OPTS}}
-        export JVM_OPTS_DEFAULT=\${JVM_OPTS_DEFAULT:-${JVM_OPTS_DEFAULT}}
-        export JVM_OPTS=\${JVM_OPTS:-${JVM_OPTS}}
-        export SPRING_BOOT_JAR_LAUNCHER=\${SPRING_BOOT_JAR_LAUNCHER:-${SPRING_BOOT_JAR_LAUNCHER}}
-        exec ${SPRING_BOOT_BAKE_APPDIR}/run.sh
-    elif [ "${SPRING_BOOT_BAKE_ENTRYPOINT_MODE}" = "sleep" ]; then
-        exec sleep infinity
-    else
-        # if SPRING_BOOT_BAKE_ENTRYPOINT_MODE is a file, execute it
-        [ -f "\${SPRING_BOOT_BAKE_ENTRYPOINT_MODE}" ] && exec "\${SPRING_BOOT_BAKE_ENTRYPOINT_MODE}"
-    fi
-EOT
-ENTRYPOINT [ "/docker-entrypoint.sh" ]
