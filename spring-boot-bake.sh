@@ -44,4 +44,4 @@ echo "SPRING_BOOT_BAKE_ENTRYPOINT_MODE=${SPRING_BOOT_BAKE_ENTRYPOINT_MODE}" >> $
 
 # Set outputs
 echo "bake-file=${SPRING_BOOT_BAKE_PATH}/docker/spring-boot-bake.hcl" >> $GITHUB_OUTPUT
-echo "dockerfile=${SPRING_BOOT_BAKE_PATH}/docker/Dockerfile" >> $GITHUB_OUTPUT
+echo "dockerfile=${SPRING_BOOT_BAKE_PATH}/docker/Dockerfile.${SPRING_BOOT_BAKE_ENTRYPOINT_MODE}" >> $GITHUB_OUTPUT
