@@ -44,4 +44,4 @@ COPY --chmod=0765 <<-EOT /docker-entrypoint.sh
         [ -f "\${DOCKERFILE_TEMPLATE}" ] && exec "\${DOCKERFILE_TEMPLATE}"
     fi
 EOT
-ENTRYPOINT [ "/docker-entrypoint.sh" ]
+CMD /docker-entrypoint.sh
