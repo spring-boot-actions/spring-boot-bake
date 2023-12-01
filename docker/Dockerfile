@@ -14,7 +14,7 @@ ARG SPRING_BOOT_BAKE_WORKDIR="." \
     SPRING_BOOT_BAKE_APPDIR="/spring-boot"
 
 WORKDIR ${SPRING_BOOT_BAKE_APPDIR}
-COPY --chmod=0765 "${SPRING_BOOT_BAKE_WORKDIR}/run.sh" ./
+COPY --chmod=0755 "${SPRING_BOOT_BAKE_WORKDIR}/run.sh" ./
 COPY --from=spring-boot-archive /spring-boot-archive/dependencies/ ./
 COPY --from=spring-boot-archive /spring-boot-archive/spring-boot-loader/ ./
 COPY --from=spring-boot-archive /spring-boot-archive/snapshot-dependencies/ ./
