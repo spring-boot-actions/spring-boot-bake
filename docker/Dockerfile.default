@@ -28,21 +28,21 @@ ARG GLOBAL_JVM_OPTS= \
     JVM_OPTS_DEFAULT= \
     JVM_OPTS= \
     SPRING_BOOT_JAR_LAUNCHER=
-COPY --chmod=0765 <<-EOT /docker-entrypoint.sh
-    #!/usr/bin/env bash
-    SPRING_BOOT_BAKE_APPDIR=\${SPRING_BOOT_BAKE_APPDIR:-${SPRING_BOOT_BAKE_APPDIR}
-    DOCKERFILE_TEMPLATE=\${DOCKERFILE_TEMPLATE:-${DOCKERFILE_TEMPLATE}}
-    if [ "${DOCKERFILE_TEMPLATE}" = "default" ]; then
-        export GLOBAL_JVM_OPTS=\${GLOBAL_JVM_OPTS:-${GLOBAL_JVM_OPTS}}
-        export JVM_OPTS_DEFAULT=\${JVM_OPTS_DEFAULT:-${JVM_OPTS_DEFAULT}}
-        export JVM_OPTS=\${JVM_OPTS:-${JVM_OPTS}}
-        export SPRING_BOOT_JAR_LAUNCHER=\${SPRING_BOOT_JAR_LAUNCHER:-${SPRING_BOOT_JAR_LAUNCHER}}
-        exec ${SPRING_BOOT_BAKE_APPDIR}/run.sh
-    elif [ "${DOCKERFILE_TEMPLATE}" = "sleep" ]; then
-        exec sleep infinity
-    else
-        # if DOCKERFILE_TEMPLATE is a file, execute it
-        [ -f "\${DOCKERFILE_TEMPLATE}" ] && exec "\${DOCKERFILE_TEMPLATE}"
-    fi
+COPY --chmod=0755 <<-EOT /docker-entrypoint.sh
+#!/usr/bin/env bash
+SPRING_BOOT_BAKE_APPDIR=\${SPRING_BOOT_BAKE_APPDIR:-${SPRING_BOOT_BAKE_APPDIR}
+SPRING_BOOT_BAKE_ENTRYPOINT_MODE=\${SPRING_BOOT_BAKE_ENTRYPOINT_MODE:-${SPRING_BOOT_BAKE_ENTRYPOINT_MODE}}
+if [ "${SPRING_BOOT_BAKE_ENTRYPOINT_MODE}" = "default" ]; then
+    export GLOBAL_JVM_OPTS=\${GLOBAL_JVM_OPTS:-${GLOBAL_JVM_OPTS}}
+    export JVM_OPTS_DEFAULT=\${JVM_OPTS_DEFAULT:-${JVM_OPTS_DEFAULT}}
+    export JVM_OPTS=\${JVM_OPTS:-${JVM_OPTS}}
+    export SPRING_BOOT_JAR_LAUNCHER=\${SPRING_BOOT_JAR_LAUNCHER:-${SPRING_BOOT_JAR_LAUNCHER}}
+    exec ${SPRING_BOOT_BAKE_APPDIR}/run.sh
+elif [ "${SPRING_BOOT_BAKE_ENTRYPOINT_MODE}" = "sleep" ]; then
+    exec sleep infinity
+else
+    # if SPRING_BOOT_BAKE_ENTRYPOINT_MODE is a file, execute it
+    [ -f "\${SPRING_BOOT_BAKE_ENTRYPOINT_MODE}" ] && exec "\${SPRING_BOOT_BAKE_ENTRYPOINT_MODE}"
+fi
 EOT
 CMD /docker-entrypoint.sh
