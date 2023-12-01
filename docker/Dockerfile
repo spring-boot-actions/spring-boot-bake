@@ -42,4 +42,4 @@ COPY --chmod=0755 <<-EOT /docker-entrypoint.sh
         [ -f "\${SPRING_BOOT_BAKE_ENTRYPOINT_MODE}" ] && exec "\${SPRING_BOOT_BAKE_ENTRYPOINT_MODE}"
     fi
 EOT
-ENTRYPOINT [ "/docker-entrypoint.sh" ]
+CMD /docker-entrypoint.sh
