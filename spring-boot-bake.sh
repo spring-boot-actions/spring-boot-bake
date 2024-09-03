@@ -3,6 +3,7 @@
 
 SPRING_BOOT_BAKE_PATH="${GITHUB_ACTION_PATH}"
 SPRING_BOOT_BAKE_BASE_IMAGE="$1"
+JARMODE="$2"
 
 # Pre-conditions
 if [[ -z "${GRADLE_METADATA_ACTION}" ]]; then
@@ -19,6 +20,7 @@ echo "SPRING_BOOT_BAKE_PATH=${SPRING_BOOT_BAKE_PATH}" >> $GITHUB_ENV
 
 # Spring Boot Bake Variables
 echo "SPRING_BOOT_BAKE_BASE_IMAGE=${SPRING_BOOT_BAKE_BASE_IMAGE}" >> $GITHUB_ENV
+echo "JARMODE=${JARMODE}" >> $GITHUB_ENV
 
 # Set outputs
 echo "bake-file=${SPRING_BOOT_BAKE_PATH}/docker/spring-boot-bake.hcl" >> $GITHUB_OUTPUT
