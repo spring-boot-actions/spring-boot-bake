@@ -15,7 +15,7 @@ variable "SPRING_BOOT_JAR_LAUNCHER" {
 }
 
 target "spring-boot-bake" {
-  dockerfile = "${SPRING_BOOT_BAKE_PATH}/docker/Dockerfile.plain"
+  dockerfile = "${SPRING_BOOT_BAKE_PATH}/docker/Dockerfile"
   args = {
     SPRING_BOOT_BAKE_PATH             = "${SPRING_BOOT_BAKE_PATH}"
     SPRING_BOOT_BAKE_WORKDIR          = "${SPRING_BOOT_BAKE_WORKDIR}"
