@@ -11,7 +11,7 @@ This action generates a `Dockerfile` and a `docker-bake.hcl` for `docker/bake-ac
 
 > **Note**  
 > 
-> Application running on Spring Boot v3 or higher shoudl use the `jarmode=tools` to enable layering. Any other version use the `jarmode=layertools`.
+> Application running on Spring Boot v3 or higher should use the `jarmode=tools` to enable layering. Any other version use the `jarmode=layertools`.
 > 
 > Starting from Spring Boot 2.4, layering is enabled by default.  
 > If you are using any version lower than 2.4, layering feature must be explicitly enabled.
