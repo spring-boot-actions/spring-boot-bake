@@ -1,7 +1,7 @@
 ARG GRADLE_BUILD_ARTIFACT
 ARG JARMODE=tools
-ARG SPRING_BOOT_BAKE_BASE_IMAGE=eclipse-temurin:17-jre-jammy
 ARG SPRING_BOOT_BAKE_APPDIR="/app"
+ARG SPRING_BOOT_BAKE_BASE_IMAGE=eclipse-temurin:17-jre-jammy
 
 # Extract the layers
 FROM ${SPRING_BOOT_BAKE_BASE_IMAGE} AS extracted
