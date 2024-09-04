@@ -21,7 +21,7 @@ WORKDIR ${SPRING_BOOT_BAKE_APPDIR}
 COPY --from=extracted /app/lib/ ${SPRING_BOOT_BAKE_APPDIR}/lib/
 COPY --from=extracted /app/${GRADLE_BUILD_ARTIFACT} ${SPRING_BOOT_BAKE_APPDIR}
 ARG SPRING_BOOT_BAKE_PATH
-ADD --chmod=0755 ${SPRING_BOOT_BAKE_PATH}/jarmode/tools/java-entrypoint.sh /java-entrypoint.sh
+ADD --chmod=0755 ${SPRING_BOOT_BAKE_PATH}/docker/tools-entrypoint.sh /java-entrypoint.sh
 
 # Prepare the image for the layertools mode
 FROM ${SPRING_BOOT_BAKE_BASE_IMAGE} AS jarmode-layertools
@@ -35,7 +35,7 @@ COPY --from=extracted /app/spring-boot-loader/ ${SPRING_BOOT_BAKE_APPDIR}
 COPY --from=extracted /app/snapshot-dependencies/ ${SPRING_BOOT_BAKE_APPDIR}
 COPY --from=extracted /app/application/ ${SPRING_BOOT_BAKE_APPDIR}
 ARG SPRING_BOOT_BAKE_PATH
-ADD --chmod=0755 ${SPRING_BOOT_BAKE_PATH}/jarmode/layertools/java-entrypoint.sh /java-entrypoint.sh
+ADD --chmod=0755 ${SPRING_BOOT_BAKE_PATH}/docker/layertools-entrypoint.sh /java-entrypoint.sh
 
 # Final
 FROM jarmode-${JARMODE}
