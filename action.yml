@@ -9,10 +9,11 @@ inputs:
   base-image:
     description: 'The base image to use for the Docker image'
     required: false
-    default: 'eclipse-temurin:11-jre-alpine'
-  template:
-    description: 'Set (default) will use the default Dockerfile template, or specify a custom template. Available templates: default, plain'
-    default: default
+    default: 'eclipse-temurin:11-jre-jammy'
+  jarmode:
+    description: 'The mode used for executing the Spring Boot JAR file'
+    required: false
+    default: 'tools'
 
 outputs:
   bake-file:
@@ -28,4 +29,4 @@ runs:
     - name: 'Spring Boot Bake'
       shell: bash
       id: meta
-      run: ${{ github.action_path }}/spring-boot-bake.sh "${{ inputs.base-image }}" "${{ inputs.template }}"
+      run: ${{ github.action_path }}/spring-boot-bake.sh "${{ inputs.base-image }}" "${{ inputs.jarmode }}"
