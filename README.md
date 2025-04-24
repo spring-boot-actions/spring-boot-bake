@@ -9,13 +9,15 @@ This action generates a `Dockerfile` and a `docker-bake.hcl` for `docker/bake-ac
 2. Copy the extracted layers to `/app` directory, leveraging the Docker layer caching mechanism
 3. Add `/java-entrypoint.sh` script, but not configure it as the entrypoint (default)
 
-> **Note**  
+> [!NOTE]  
 > 
 > Application running on Spring Boot v3 or higher should use the `jarmode=tools` to enable layering. Any other version use the `jarmode=layertools`.
 > 
 > Starting from Spring Boot 2.4, layering is enabled by default.  
 > If you are using any version lower than 2.4, layering feature must be explicitly enabled.
->
+
+> [!IMPORTANT]
+> Please provide a base image with `ENTRYPOINT` instruction already set to and executable. This action only provide layers for your application and does not configure `ENTRYPOINT`.
 
 
 ## Usage
